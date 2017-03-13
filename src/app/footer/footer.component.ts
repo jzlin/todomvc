@@ -12,6 +12,11 @@ export class FooterComponent implements OnInit {
   @Output()
   clearCompleted = new EventEmitter();
 
+  filterType = 'All';
+
+  @Output()
+  filterTodos = new EventEmitter<string>();
+
   constructor() { }
 
   ngOnInit() {
@@ -19,6 +24,11 @@ export class FooterComponent implements OnInit {
 
   clearBtnOnClick() {
     this.clearCompleted.emit();
+  }
+
+  filterTypeOnClick(type: string) {
+    this.filterType = type;
+    this.filterTodos.emit(type);
   }
 
 }
