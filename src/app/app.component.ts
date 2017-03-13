@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Http } from '@angular/http';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +11,10 @@ export class AppComponent {
   todos: any[] = [];
   todo = '';
   filterType = 'All';
+  toggleAll = false;
+
+  constructor(private http: Http) {
+  }
 
   addTodo() {
     if (this.todo) {
@@ -28,5 +33,16 @@ export class AppComponent {
 
   filterTodos(type: string) {
     this.filterType = type;
+  }
+
+  toggleAllOnChange() {
+    this.todos.forEach(item => {
+      item.done = this.toggleAll;
+    });
+  }
+
+  removeTodo(todo: any) {
+    this.todos.splice(this.todos.indexOf(todo), 1);
+    this.todos = [...this.todos];
   }
 }
