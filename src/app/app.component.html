@@ -13,7 +13,7 @@
       <li *ngFor="let item of todos" [ngClass]="{'completed': item.done}">
         <div class="view">
           <input class="toggle" type="checkbox" [(ngModel)]="item.done">
-          <label>{{item.todo}}</label>
+          <label>{{item.todo | uppercase}}</label>
           <button class="destroy"></button>
         </div>
         <input class="edit" value="Rule the web">
