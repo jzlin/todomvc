@@ -11,10 +11,12 @@ export class AppComponent {
   todo = '';
 
   addTodo() {
-    this.todos.push({
-      todo: this.todo,
-      done: false
-    });
-    this.todo = '';
+    if (this.todo) {
+      this.todos.push({
+        todo: this.todo,
+        done: false
+      });
+      this.todo = '';
+    }
   }
 }
