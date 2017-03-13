@@ -19,4 +19,8 @@ export class AppComponent {
       this.todo = '';
     }
   }
+
+  clearCompleted() {
+    this.todos = this.todos.filter(item => { return !item.done; });
+  }
 }
