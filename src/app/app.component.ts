@@ -11,7 +11,10 @@ export class AppComponent {
   todo = '';
 
   addTodo() {
-    this.todos.push(this.todo);
+    this.todos.push({
+      todo: this.todo,
+      done: false
+    });
     this.todo = '';
   }
 }
