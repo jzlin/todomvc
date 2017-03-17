@@ -4,15 +4,15 @@
   <!-- Remove this if you don't implement routing -->
   <ul class="filters">
     <li>
-      <a [ngClass]="{'selected': filterType === 'All'}" (click)="filterTypeOnClick('All')">All</a>
+      <a [class.selected]="filterType === 'All'" (click)="changeFilterType('All')">All</a>
     </li>
     <li>
-      <a [ngClass]="{'selected': filterType === 'Active'}" (click)="filterTypeOnClick('Active')">Active</a>
+      <a [class.selected]="filterType === 'Active'" (click)="changeFilterType('Active')">Active</a>
     </li>
     <li>
-      <a [ngClass]="{'selected': filterType === 'Completed'}" (click)="filterTypeOnClick('Completed')">Completed</a>
+      <a [class.selected]="filterType === 'Completed'" (click)="changeFilterType('Completed')">Completed</a>
     </li>
   </ul>
   <!-- Hidden if no completed items are left ↓ -->
-  <button class="clear-completed" (click)="clearBtnOnClick()">Clear completed</button>
+  <button class="clear-completed" (click)="clearBtnClick()" *ngIf="haveComplete()">Clear completed</button>
 </footer>

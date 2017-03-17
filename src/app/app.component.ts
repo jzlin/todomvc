@@ -10,7 +10,7 @@ export class AppComponent implements OnInit {
   inputHint  = 'What needs to be done?';
   todos: any[] = [];
   todo = '';
-  filterType = 'All';
+  filterType: string;
   toggleAll = false;
 
   constructor (private dataSvc: DataService) {
@@ -19,20 +19,26 @@ export class AppComponent implements OnInit {
   ngOnInit () {
     this.dataSvc.getTodos().subscribe(data => {
       this.todos = data;
+      this.updateToggleAllState();
     })
   }
 
-  updateTodos (newTodos: any[]) {
+  private updateTodos (newTodos: any[]) {
     let oldTodos = [...this.todos];
     this.todos = newTodos;
+    this.updateToggleAllState();
     return this.dataSvc.updateTodos(newTodos).catch(err => {
       this.todos = oldTodos;
+      this.updateToggleAllState();
       return err;
     });
   }
 
-  updateTodo (todo: any, done: boolean) {
+  private updateToggleAllState () {
     this.toggleAll = this.todos.filter(item => { return !item.done; }).length === 0;
+  }
+
+  updateTodo () {
     let newTodos = [...this.todos];
     this.updateTodos(newTodos).subscribe(data => {});
   }
@@ -57,11 +63,11 @@ export class AppComponent implements OnInit {
     this.updateTodos(newTodos).subscribe(data => {});
   }
 
-  filterTodos (type: string) {
+  filterTypeChange (type: string) {
     this.filterType = type;
   }
 
-  toggleAllOnChange (value: boolean) {
+  toggleAllChange (value: boolean) {
     let newTodos = [...this.todos];
     newTodos.forEach(item => {
       item.done = value;

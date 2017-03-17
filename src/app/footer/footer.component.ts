@@ -6,6 +6,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./footer.component.css']
 })
 export class FooterComponent implements OnInit {
+
   @Input()
   todos: any[];
 
@@ -15,20 +16,24 @@ export class FooterComponent implements OnInit {
   filterType = 'All';
 
   @Output()
-  filterTodos = new EventEmitter<string>();
+  filterTypeChange = new EventEmitter<string>();
 
-  constructor() { }
+  constructor () { }
 
-  ngOnInit() {
+  ngOnInit () {
   }
 
-  clearBtnOnClick() {
+  clearBtnClick () {
     this.clearCompleted.emit();
   }
 
-  filterTypeOnClick(type: string) {
+  changeFilterType (type: string) {
     this.filterType = type;
-    this.filterTodos.emit(type);
+    this.filterTypeChange.emit(type);
+  }
+
+  haveComplete () {
+    return this.todos.filter(item => { return item.done; }).length > 0;
   }
 
 }
