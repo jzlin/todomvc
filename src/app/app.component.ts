@@ -1,61 +1,40 @@
-import { Component } from '@angular/core';
-import { Http, RequestOptions, Headers, Response } from '@angular/http';
-
-import { Observable } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { DataService } from "./data.service";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   inputHint  = 'What needs to be done?';
   todos: any[] = [];
   todo = '';
   filterType = 'All';
   toggleAll = false;
-  requestOptions: RequestOptions = new RequestOptions({
-    headers: new Headers({
-      'Authorization': 'token 09123582-43ba-4816-9063-cc6c420540b9'
+
+  constructor (private dataSvc: DataService) {
+  }
+
+  ngOnInit () {
+    this.dataSvc.getTodos().subscribe(data => {
+      this.todos = data;
     })
-  });
-
-  constructor (private http: Http) {
-    this.http.get('./me/todomvc', this.requestOptions).subscribe(res => {
-      this.todos = res.json();
-    });
   }
 
-  private handleError (error: Response | any) {
-    // In a real world app, you might use a remote logging infrastructure
-    let errMsg: string;
-    if (error instanceof Response) {
-      const body = error.json() || '';
-      const err = body.error || JSON.stringify(body);
-      errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
-    } else {
-      errMsg = error.message ? error.message : error.toString();
-    }
-    console.error(errMsg);
-    return Observable.throw(errMsg);
-  }
-
-  updateTodos (newTodos: any[]): Observable<any[]> {
+  updateTodos (newTodos: any[]) {
     let oldTodos = [...this.todos];
     this.todos = newTodos;
-    return this.http.post('./me/todomvc', newTodos, this.requestOptions).map(res => {
-      return res.json();
-    }).catch(error => {
+    return this.dataSvc.updateTodos(newTodos).catch(err => {
       this.todos = oldTodos;
-      return this.handleError(error);
+      return err;
     });
   }
 
   updateTodo (todo: any, done: boolean) {
+    this.toggleAll = this.todos.filter(item => { return !item.done; }).length === 0;
     let newTodos = [...this.todos];
-    this.updateTodos(newTodos).subscribe(data => {}, err => {
-      todo.done = !done;
-    });
+    this.updateTodos(newTodos).subscribe(data => {});
   }
 
   addTodo () {
@@ -82,10 +61,12 @@ export class AppComponent {
     this.filterType = type;
   }
 
-  toggleAllOnChange () {
-    this.todos.forEach(item => {
-      item.done = this.toggleAll;
+  toggleAllOnChange (value: boolean) {
+    let newTodos = [...this.todos];
+    newTodos.forEach(item => {
+      item.done = value;
     });
+    this.updateTodos(newTodos).subscribe(data => {});
   }
 
   removeTodo (todo: any) {
