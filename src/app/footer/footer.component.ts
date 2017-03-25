@@ -1,14 +1,22 @@
-import { Component, OnInit, OnChanges, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.css']
 })
-export class FooterComponent implements OnInit, OnChanges {
+export class FooterComponent implements OnInit {
+
+  private _todos: any[];
 
   @Input()
-  todos: any[];
+  set todos(val: any[]) {
+    this._todos = val;
+    this.tooMuch = this._todos.filter(item => !item.done).length > 5;
+  }
+  get todos(): any[] {
+    return this._todos;
+  }
 
   @Output()
   clearCompleted = new EventEmitter();
@@ -23,10 +31,6 @@ export class FooterComponent implements OnInit, OnChanges {
   constructor () { }
 
   ngOnInit () {
-  }
-
-  ngOnChanges () {
-    this.tooMuch = this.todos.filter(item => !item.done).length > 5;
   }
 
   clearBtnClick () {
