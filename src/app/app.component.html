@@ -21,10 +21,12 @@
     </ul>
   </section>
   <!-- This footer should hidden by default and shown when there are todos -->
-  <app-footer *ngIf="todos.length > 0" [todos]="todos"
+  <!-- local template variables will not work when it inside ngIf -->
+  <app-footer #footerRef [todos]="todos"
     (clearCompleted)="clearCompleted()"
     (filterTypeChange)="filterTypeChange($event)"></app-footer>
 </section>
+<button (click)="footerRef.changeFilterType('Active')">Active</button>
 <footer class="info">
   <p>Double-click to edit a todo</p>
   <!-- Remove the below line ↓ -->

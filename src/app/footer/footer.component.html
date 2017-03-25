@@ -1,4 +1,4 @@
-<footer class="footer">
+<footer class="footer" *ngIf="todos.length > 0">
   <!-- This should be `0 items left` by default -->
   <span class="todo-count" [ngStyle]="{'color': tooMuch ? 'red' : ''}">
     <strong>{{(todos | filter : 'Active').length}}</strong> item left
